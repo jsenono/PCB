@@ -17,7 +17,7 @@ This document defines the structure used to represent a PCB  as a graph.
 
 # 🧱 Graph Structure
 
-## Graph Object
+## Graph Object Primitives
 
 ```json
 {
