@@ -22,7 +22,7 @@ export default function AddNodeModal({ onClose, onAdd, existingCount }) {
         {[["node_id", "Node ID"], ["label", "Label"], ["x", "X coord"], ["y", "Y coord"], ["value", "Value"]].map(([k, l]) => (
           <div key={k}>
             <label className="label">{l}</label>
-            <input className="input" value={form[k]} onChange={(e) => set(k, e.target.value)} />
+            <input className="input" value={form[k]} onChange={(e) => set(k, e.target.value)} disabled={k === "node_id"} />
           </div>
         ))}
         <div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import {API_BASE, KIND_COLORS, KIND_SYMBOLS} from "./utils/constants";
+import {KIND_COLORS, KIND_SYMBOLS} from "./utils/constants";
 import GraphPanel from "./panels/GraphPanel";
 import NodesPanel from "./panels/NodesPanel";
 import EdgesPanel from "./panels/EdgesPanel";
@@ -11,27 +11,7 @@ import EditNodeModal from "./components/EditNodeModal";
 import AddEdgeModal from "./components/AddEdgeModal";
 import Modal from "./components/Modal";
 import { CircuitsHome } from "./panels/CircuitsHome";
-
-// ─── API helpers ────────────────────────────────────────────────────────────
-const api = {
-  get: (path) => fetch(`${API_BASE}${path}`).then((r) => r.json()),
-  post: (path, body) =>
-    fetch(`${API_BASE}${path}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    }).then((r) => r.json()),
-  put: (path, body) =>
-    fetch(`${API_BASE}${path}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((r) => r.json()),
-  delete: (path) => fetch(`${API_BASE}${path}`, { method: "DELETE" }),
-  postQuery: (path) =>
-    fetch(`${API_BASE}${path}`, { method: "POST" }).then((r) => r.json()),
-};
-
+import { api } from "./utils/api";
 
 
 // ─── Tiny toast system ───────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 import { useState } from "react";
-
-
+import { api } from "../utils/api";
+import { KIND_COLORS } from "../utils/constants";
 // ─────────────────────────────────────────────────────────────────────────────
 // ANALYSIS PANEL
 // ─────────────────────────────────────────────────────────────────────────────
@@ -28,8 +28,9 @@ export default function AnalysisPanel({ circuitId, stats, connectivity, onLoadSt
   async function loadKinds() {
     try {
       const res = await api.get(`/circuits/${circuitId}/analysis/components-by-kind`);
-      setKindData(res);
-    } catch { alert("Failed to load component kinds"); }
+      setKindData(res.component_types);
+      console.log("res.component_types)", res.component_types);
+    } catch  (error) { alert("Failed to load component kinds"); }
   }
 
   return (
@@ -143,12 +144,12 @@ export default function AnalysisPanel({ circuitId, stats, connectivity, onLoadSt
           </div>
           {kindData ? (
             <div className="fade-in" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {Object.entries(kindData).map(([kind, count]) => {
+              {Object.entries(kindData).map(([kind, members]) => {
                 const color = KIND_COLORS[kind] || "#94a3b8";
                 return (
                   <div key={kind} style={{ background: `${color}11`, border: `1px solid ${color}33`, borderRadius: 4, padding: "8px 16px", textAlign: "center" }}>
                     <div style={{ fontSize: 9, color: "#4a5568", textTransform: "uppercase", letterSpacing: "0.1em" }}>{kind}</div>
-                    <div style={{ fontSize: 22, fontWeight: 700, color, fontFamily: "Orbitron" }}>{count}</div>
+                    <div style={{ fontSize: 22, fontWeight: 700, color, fontFamily: "Orbitron" }}>{members.length}</div>
                   </div>
                 );
               })}
