@@ -1,3 +1,11 @@
+import { useState, useRef } from "react";
+import AddNodeModal from "../components/AddNodeModal";
+import EditNodeModal from "../components/EditNodeModal";
+import AddEdgeModal from "../components/AddEdgeModal";
+import NewCircuitModal from "../components/NewCircuitModal";
+import GraphPanel from "./GraphPanel";
+
+
 // ─────────────────────────────────────────────────────────────────────────────
 // CIRCUITS HOME
 // ─────────────────────────────────────────────────────────────────────────────
