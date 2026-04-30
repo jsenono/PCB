@@ -1,0 +1,1514 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PCB Circuit Design API",
+    "description": "Comprehensive API for interactive PCB circuit design using graph data structures",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "description": "Welcome endpoint with API overview",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Health check endpoint",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits": {
+      "get": {
+        "summary": "List Circuits",
+        "description": "List all circuits with summary statistics",
+        "operationId": "list_circuits_circuits_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Circuit",
+        "description": "Create a new circuit",
+        "operationId": "create_circuit_circuits_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CircuitCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CircuitResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}": {
+      "get": {
+        "summary": "Get Circuit",
+        "description": "Get circuit details",
+        "operationId": "get_circuit_circuits__circuit_id__get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CircuitResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Circuit",
+        "description": "Delete a circuit",
+        "operationId": "delete_circuit_circuits__circuit_id__delete",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/stats": {
+      "post": {
+        "summary": "Get Circuit Stats",
+        "description": "Get comprehensive circuit statistics",
+        "operationId": "get_circuit_stats_circuits__circuit_id__stats_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CircuitStats"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/nodes": {
+      "post": {
+        "summary": "Add Node",
+        "description": "Add a new component (node) to circuit",
+        "operationId": "add_node_circuits__circuit_id__nodes_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Nodes",
+        "description": "Get all nodes in circuit",
+        "operationId": "list_nodes_circuits__circuit_id__nodes_get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NodeResponse"
+                  },
+                  "title": "Response List Nodes Circuits  Circuit Id  Nodes Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/nodes/{node_id}": {
+      "get": {
+        "summary": "Get Node",
+        "description": "Get specific node details",
+        "operationId": "get_node_circuits__circuit_id__nodes__node_id__get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Node",
+        "description": "Update node properties (recreate node with new properties)",
+        "operationId": "update_node_circuits__circuit_id__nodes__node_id__put",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove Node",
+        "description": "Remove a node from circuit",
+        "operationId": "remove_node_circuits__circuit_id__nodes__node_id__delete",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/edges": {
+      "post": {
+        "summary": "Add Edge",
+        "description": "Add a connection (edge) between two nodes",
+        "operationId": "add_edge_circuits__circuit_id__edges_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EdgeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EdgeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Edges",
+        "description": "Get all connections in circuit",
+        "operationId": "list_edges_circuits__circuit_id__edges_get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EdgeResponse"
+                  },
+                  "title": "Response List Edges Circuits  Circuit Id  Edges Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/edges/{node_a}/{node_b}": {
+      "get": {
+        "summary": "Get Edge",
+        "description": "Check if connection exists between two nodes",
+        "operationId": "get_edge_circuits__circuit_id__edges__node_a___node_b__get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "node_a",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node A"
+            }
+          },
+          {
+            "name": "node_b",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node B"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove Edge",
+        "description": "Remove a connection between two nodes",
+        "operationId": "remove_edge_circuits__circuit_id__edges__node_a___node_b__delete",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "node_a",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node A"
+            }
+          },
+          {
+            "name": "node_b",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node B"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/analysis/neighbors/{node_id}": {
+      "get": {
+        "summary": "Analyze Node Connections",
+        "description": "Analyze all connections for a specific node",
+        "operationId": "analyze_node_connections_circuits__circuit_id__analysis_neighbors__node_id__get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionAnalysis"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/analysis/connectivity": {
+      "get": {
+        "summary": "Analyze Circuit Connectivity",
+        "description": "Analyze overall circuit connectivity",
+        "operationId": "analyze_circuit_connectivity_circuits__circuit_id__analysis_connectivity_get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/analysis/layers": {
+      "get": {
+        "summary": "Analyze Layers",
+        "description": "Analyze nodes and edges by layer",
+        "operationId": "analyze_layers_circuits__circuit_id__analysis_layers_get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/analysis/components-by-kind": {
+      "get": {
+        "summary": "Analyze Components By Kind",
+        "description": "Analyze components by kind/type",
+        "operationId": "analyze_components_by_kind_circuits__circuit_id__analysis_components_by_kind_get",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/algorithms/bfs": {
+      "post": {
+        "summary": "Run Bfs",
+        "description": "Run Breadth-First Search traversal from a starting node",
+        "operationId": "run_bfs_circuits__circuit_id__algorithms_bfs_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "start_node",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Start Node"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TraversalResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/algorithms/dfs": {
+      "post": {
+        "summary": "Run Dfs",
+        "description": "Run Depth-First Search traversal from a starting node",
+        "operationId": "run_dfs_circuits__circuit_id__algorithms_dfs_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          },
+          {
+            "name": "start_node",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Start Node"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TraversalResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/algorithms/kruskal-mst": {
+      "post": {
+        "summary": "Run Kruskal Mst",
+        "description": "Calculate Minimum Spanning Tree using Kruskal's algorithm",
+        "operationId": "run_kruskal_mst_circuits__circuit_id__algorithms_kruskal_mst_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MSTResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/circuits/{circuit_id}/algorithms/cycle-detection": {
+      "post": {
+        "summary": "Detect Cycles",
+        "description": "Detect if circuit has cycles",
+        "operationId": "detect_cycles_circuits__circuit_id__algorithms_cycle_detection_post",
+        "parameters": [
+          {
+            "name": "circuit_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Circuit Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CycleDetectionResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/algorithms": {
+      "get": {
+        "summary": "List Available Algorithms",
+        "description": "List all available graph algorithms",
+        "operationId": "list_available_algorithms_algorithms_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CircuitCreateRequest": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "title": "CircuitCreateRequest",
+        "description": "Request model for creating a new circuit"
+      },
+      "CircuitResponse": {
+        "properties": {
+          "circuit_id": {
+            "type": "integer",
+            "title": "Circuit Id"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/NodeResponse"
+            },
+            "type": "array",
+            "title": "Nodes"
+          },
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/EdgeResponse"
+            },
+            "type": "array",
+            "title": "Edges"
+          },
+          "total_weight": {
+            "type": "number",
+            "title": "Total Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "circuit_id",
+          "nodes",
+          "edges",
+          "total_weight"
+        ],
+        "title": "CircuitResponse",
+        "description": "Response model for circuit"
+      },
+      "CircuitStats": {
+        "properties": {
+          "circuit_id": {
+            "type": "integer",
+            "title": "Circuit Id"
+          },
+          "node_count": {
+            "type": "integer",
+            "title": "Node Count"
+          },
+          "edge_count": {
+            "type": "integer",
+            "title": "Edge Count"
+          },
+          "total_weight": {
+            "type": "number",
+            "title": "Total Weight"
+          },
+          "avg_degree": {
+            "type": "number",
+            "title": "Avg Degree"
+          }
+        },
+        "type": "object",
+        "required": [
+          "circuit_id",
+          "node_count",
+          "edge_count",
+          "total_weight",
+          "avg_degree"
+        ],
+        "title": "CircuitStats",
+        "description": "Response model for circuit statistics"
+      },
+      "ConnectionAnalysis": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "degree": {
+            "type": "integer",
+            "title": "Degree"
+          },
+          "neighbors": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Neighbors"
+          },
+          "total_connected_weight": {
+            "type": "number",
+            "title": "Total Connected Weight"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "degree",
+          "neighbors",
+          "total_connected_weight"
+        ],
+        "title": "ConnectionAnalysis",
+        "description": "Response model for connection analysis"
+      },
+      "CycleDetectionResult": {
+        "properties": {
+          "circuit_id": {
+            "type": "integer",
+            "title": "Circuit Id"
+          },
+          "has_cycle": {
+            "type": "boolean",
+            "title": "Has Cycle"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "circuit_id",
+          "has_cycle",
+          "status"
+        ],
+        "title": "CycleDetectionResult",
+        "description": "Response model for cycle detection"
+      },
+      "EdgeRequest": {
+        "properties": {
+          "node_a": {
+            "type": "string",
+            "title": "Node A"
+          },
+          "node_b": {
+            "type": "string",
+            "title": "Node B"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          },
+          "edge_type": {
+            "type": "string",
+            "title": "Edge Type",
+            "default": "signal"
+          },
+          "layer": {
+            "type": "string",
+            "title": "Layer",
+            "default": "top"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_a",
+          "node_b",
+          "weight"
+        ],
+        "title": "EdgeRequest",
+        "description": "Request model for creating/updating connections"
+      },
+      "EdgeResponse": {
+        "properties": {
+          "node_a": {
+            "type": "string",
+            "title": "Node A"
+          },
+          "node_b": {
+            "type": "string",
+            "title": "Node B"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          },
+          "edge_type": {
+            "type": "string",
+            "title": "Edge Type"
+          },
+          "layer": {
+            "type": "string",
+            "title": "Layer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_a",
+          "node_b",
+          "weight",
+          "edge_type",
+          "layer"
+        ],
+        "title": "EdgeResponse",
+        "description": "Response model for connections"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "MSTResult": {
+        "properties": {
+          "circuit_id": {
+            "type": "integer",
+            "title": "Circuit Id"
+          },
+          "algorithm": {
+            "type": "string",
+            "title": "Algorithm"
+          },
+          "mst_edges": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Mst Edges"
+          },
+          "total_weight": {
+            "type": "number",
+            "title": "Total Weight"
+          },
+          "edge_count": {
+            "type": "integer",
+            "title": "Edge Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "circuit_id",
+          "algorithm",
+          "mst_edges",
+          "total_weight",
+          "edge_count"
+        ],
+        "title": "MSTResult",
+        "description": "Response model for Minimum Spanning Tree (Kruskal's algorithm)"
+      },
+      "NodeRequest": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "x": {
+            "type": "number",
+            "title": "X",
+            "default": 0
+          },
+          "y": {
+            "type": "number",
+            "title": "Y",
+            "default": 0
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind",
+            "default": "other"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "pins": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pins"
+          },
+          "layer": {
+            "type": "string",
+            "title": "Layer",
+            "default": "top"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "label"
+        ],
+        "title": "NodeRequest",
+        "description": "Request model for creating/updating PCB nodes (components)"
+      },
+      "NodeResponse": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "x": {
+            "type": "number",
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "title": "Y"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "pins": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pins"
+          },
+          "layer": {
+            "type": "string",
+            "title": "Layer"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "label",
+          "x",
+          "y",
+          "kind",
+          "value",
+          "pins",
+          "layer",
+          "status"
+        ],
+        "title": "NodeResponse",
+        "description": "Response model for PCB nodes"
+      },
+      "TraversalResult": {
+        "properties": {
+          "circuit_id": {
+            "type": "integer",
+            "title": "Circuit Id"
+          },
+          "algorithm": {
+            "type": "string",
+            "title": "Algorithm"
+          },
+          "start_node": {
+            "type": "string",
+            "title": "Start Node"
+          },
+          "traversal_order": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Traversal Order"
+          },
+          "nodes_visited": {
+            "type": "integer",
+            "title": "Nodes Visited"
+          }
+        },
+        "type": "object",
+        "required": [
+          "circuit_id",
+          "algorithm",
+          "start_node",
+          "traversal_order",
+          "nodes_visited"
+        ],
+        "title": "TraversalResult",
+        "description": "Response model for graph traversal algorithms (BFS, DFS)"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
