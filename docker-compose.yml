@@ -1,0 +1,14 @@
+services:
+  backend:
+    build: ./pcb-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=production
+
+  frontend:
+    build: ./pcb-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
