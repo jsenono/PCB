@@ -8,6 +8,8 @@ Install all required dependencies:
 npm install
 ```
 
+Replace the value of the `API_BASE` constant in the `/src/utils/constant` file by the real link to the API
+
 ### ▶️ Running the Project
 
 Start the development server:
