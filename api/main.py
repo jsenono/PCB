@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Tuple
 from core.graph import PCBGraph, PCBNode, PCBEdge
+from algorithm.algorithm import bfs, dfs, kruskal_mst, has_cycle
 
 app = FastAPI(
     title="PCB Circuit Design API",
@@ -97,6 +98,33 @@ class CircuitStats(BaseModel):
     edge_count: int
     total_weight: float
     avg_degree: float
+
+
+# ==================== Algorithm Result Models ====================
+
+class TraversalResult(BaseModel):
+    """Response model for graph traversal algorithms (BFS, DFS)"""
+    circuit_id: int
+    algorithm: str
+    start_node: str
+    traversal_order: List[str]
+    nodes_visited: int
+
+
+class MSTResult(BaseModel):
+    """Response model for Minimum Spanning Tree (Kruskal's algorithm)"""
+    circuit_id: int
+    algorithm: str
+    mst_edges: List[Dict]
+    total_weight: float
+    edge_count: int
+
+
+class CycleDetectionResult(BaseModel):
+    """Response model for cycle detection"""
+    circuit_id: int
+    has_cycle: bool
+    status: str
 
 
 # ==================== Helper Functions ====================
@@ -512,6 +540,138 @@ async def analyze_components_by_kind(circuit_id: int):
         "summary": {kind: len(components) for kind, components in kinds.items()}
     }
 
+
+
+# ==================== Graph Algorithm Endpoints ====================
+
+@app.post("/circuits/{circuit_id}/algorithms/bfs", response_model=TraversalResult)
+async def run_bfs(circuit_id: int, start_node: str):
+    """Run Breadth-First Search traversal from a starting node"""
+    graph = get_circuit_or_404(circuit_id)
+    
+    if not graph.has_node(start_node):
+        raise HTTPException(status_code=404, detail=f"Start node {start_node} not found")
+    
+    try:
+        traversal_order = bfs(graph, start_node)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"BFS algorithm error: {str(e)}")
+    
+    return TraversalResult(
+        circuit_id=circuit_id,
+        algorithm="BFS (Breadth-First Search)",
+        start_node=start_node,
+        traversal_order=traversal_order,
+        nodes_visited=len(traversal_order)
+    )
+
+
+@app.post("/circuits/{circuit_id}/algorithms/dfs", response_model=TraversalResult)
+async def run_dfs(circuit_id: int, start_node: str):
+    """Run Depth-First Search traversal from a starting node"""
+    graph = get_circuit_or_404(circuit_id)
+    
+    if not graph.has_node(start_node):
+        raise HTTPException(status_code=404, detail=f"Start node {start_node} not found")
+    
+    try:
+        traversal_order = dfs(graph, start_node)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"DFS algorithm error: {str(e)}")
+    
+    return TraversalResult(
+        circuit_id=circuit_id,
+        algorithm="DFS (Depth-First Search)",
+        start_node=start_node,
+        traversal_order=traversal_order,
+        nodes_visited=len(traversal_order)
+    )
+
+
+@app.post("/circuits/{circuit_id}/algorithms/kruskal-mst", response_model=MSTResult)
+async def run_kruskal_mst(circuit_id: int):
+    """Calculate Minimum Spanning Tree using Kruskal's algorithm"""
+    graph = get_circuit_or_404(circuit_id)
+    
+    if len(graph.nodes) < 2:
+        raise HTTPException(status_code=400, detail="Circuit must have at least 2 nodes for MST calculation")
+    
+    try:
+        mst_edges, total_weight = kruskal_mst(graph)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Kruskal MST algorithm error: {str(e)}")
+    
+    # Format MST edges for response
+    formatted_edges = [
+        {
+            "node_a": edge.node_a,
+            "node_b": edge.node_b,
+            "weight": edge.weight,
+            "edge_type": edge.type,
+            "layer": edge.layer
+        }
+        for edge in mst_edges
+    ]
+    
+    return MSTResult(
+        circuit_id=circuit_id,
+        algorithm="Kruskal's MST (Minimum Spanning Tree)",
+        mst_edges=formatted_edges,
+        total_weight=total_weight,
+        edge_count=len(mst_edges)
+    )
+
+
+@app.post("/circuits/{circuit_id}/algorithms/cycle-detection", response_model=CycleDetectionResult)
+async def detect_cycles(circuit_id: int):
+    """Detect if circuit has cycles"""
+    graph = get_circuit_or_404(circuit_id)
+    
+    try:
+        cycle_exists = has_cycle(graph)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Cycle detection error: {str(e)}")
+    
+    return CycleDetectionResult(
+        circuit_id=circuit_id,
+        has_cycle=cycle_exists,
+        status="Cycle detected" if cycle_exists else "No cycles detected"
+    )
+
+
+# ==================== Algorithm Help ====================
+
+@app.get("/algorithms")
+async def list_available_algorithms():
+    """List all available graph algorithms"""
+    return {
+        "available_algorithms": [
+            {
+                "name": "Breadth-First Search (BFS)",
+                "endpoint": "POST /circuits/{circuit_id}/algorithms/bfs",
+                "parameters": ["circuit_id", "start_node"],
+                "description": "Traverses graph level by level from a starting node"
+            },
+            {
+                "name": "Depth-First Search (DFS)",
+                "endpoint": "POST /circuits/{circuit_id}/algorithms/dfs",
+                "parameters": ["circuit_id", "start_node"],
+                "description": "Traverses graph by going as deep as possible before backtracking"
+            },
+            {
+                "name": "Kruskal's Minimum Spanning Tree",
+                "endpoint": "POST /circuits/{circuit_id}/algorithms/kruskal-mst",
+                "parameters": ["circuit_id"],
+                "description": "Finds the minimum spanning tree that connects all nodes with minimum total weight"
+            },
+            {
+                "name": "Cycle Detection",
+                "endpoint": "POST /circuits/{circuit_id}/algorithms/cycle-detection",
+                "parameters": ["circuit_id"],
+                "description": "Detects if the circuit graph contains any cycles"
+            }
+        ]
+    }
 
 
 
